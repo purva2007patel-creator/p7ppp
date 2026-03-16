@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Form</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .feedback-chart { width: 400px; height: 400px; }
+        .form-group { margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <h1>Feedback Form</h1>
+    <form id="feedbackForm">
+        <div class="form-group">
+            <label for="rating">Rate our service:</label>
+            <select id="rating" name="rating">
+                <option value="1">1 - Poor</option>
+                <option value="2">2 - Fair</option>
+                <option value="3">3 - Good</option>
+                <option value="4">4 - Very Good</option>
+                <option value="5">5 - Excellent</option>
+            </select>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+    <h2>Feedback Statistics</h2>
+    <canvas id="feedbackChart" class="feedback-chart"></canvas>
+
+    <script>
+        const ctx = document.getElementById('feedbackChart').getContext('2d');
+        const feedbackChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['1', '2', '3', '4', '5'],
+                datasets: [{
+                    label: 'Ratings',
+                    data: [0, 0, 0, 0, 0], // Default Data
+                    backgroundColor: ['red', 'orange', 'yellow', 'lightgreen', 'green'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'User Ratings'
+                    }
+                }
+            }
+        });
+
+        document.getElementById('feedbackForm').onsubmit = function(event) {
+            event.preventDefault();
+            const rating = document.getElementById('rating').value;
+            feedbackChart.data.datasets[0].data[rating - 1] += 1;
+            feedbackChart.update();
+        };
+    </script>
+</body>
+</html>
